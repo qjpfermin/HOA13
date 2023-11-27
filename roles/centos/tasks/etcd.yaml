@@ -1,0 +1,19 @@
+---
+    - name: Install etcd
+      yum:
+        name: etcd
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Start and enable etcd service
+      service:
+        name: etcd
+        state: started
+        enabled: true
+      when: ansible_distribution == "CentOS"
+
+    - name: Ensure etcd is running
+      wait_for:
+        port: 2379
+        delay: 10
+      when: ansible_distribution == "CentOS"

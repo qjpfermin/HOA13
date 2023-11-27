@@ -1,0 +1,23 @@
+---
+  - name: Installing Mariadb and Python SQL
+    apt:
+      name:
+        - mariadb-server
+        - python3-pymysql
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Copying openstack.cnf file
+    copy:
+      src: 99-openstack.cnf
+      dest: /etc/mysql/maradb.conf.d
+      owner: root
+      group: root
+      mode: 644
+
+  - name: Starting/Enabling Mariadb service
+    tags: SQL, ubuntu
+    service:
+      name: mysql
+      state: restarted
+      enabled: true

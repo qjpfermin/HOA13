@@ -1,0 +1,13 @@
+---
+    - name: Install SQL Database (e.g., MariaDB)
+      yum:
+        name: mariadb-server
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Start and enable MariaDB service
+      service:
+        name: mariadb
+        state: started
+        enabled: true
+      when: ansible_distribution == "CentOS"

@@ -1,0 +1,23 @@
+---
+  - name: Installing Memcached
+    tags: Memcached, ubuntu
+    apt:
+      name:
+        -  memcached
+        -  python3-memcache
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Configuring the conf file for memcached
+    tags: Memcached, ubutu
+    lineinfile:
+      path: /etc/memcached.conf
+      regexp: '^(-l\s+)127.0.0.1'
+      line: '\g<1>192.168.56.108'
+
+  - name: Reloading Memcached service
+    tags: Memcached,ubuntu
+    service:
+      name: memcached
+      state: restarted
+    when: ansible_distribution == "Ubuntu"

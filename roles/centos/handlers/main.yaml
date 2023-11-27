@@ -1,0 +1,13 @@
+---
+- name: Restart services
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - ntpd
+    - mariadb
+    - rabbitmq-server
+    - memcached
+    - etcd
+    - openstack-nova   
+  when: ansible_distribution == "CentOS"

@@ -1,0 +1,34 @@
+---
+  - name: Installing NTP
+    tags: ntp,ubuntu
+    apt:
+      name: chrony
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Configuring the conf file
+    tags: ntp,replace,ubuntu
+    lineinfile:
+      path: /etc/chrony/chrony.conf
+      line: "server 192.168.56.108"
+      state: present
+      backup: yes
+    register: modification
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Enabling other nodes to connect to the chrony daemon via controller node
+    tags: allow, ntp, ubuntu
+    lineinfile:
+      path: /etc/chrony/chrony.conf
+      line: "allow 10.0.0.0/24"
+      state: present
+      backup: yes
+    register: addition
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Relaoding NTP service
+    tags: ntp, ubuntu, restart
+    service:
+      name: chrony
+      state: restarted
+    when: ansible_distribution == "Ubuntu"

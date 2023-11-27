@@ -1,0 +1,32 @@
+---
+    - name: Enabling openstack repository
+      tags: OS
+      yum:
+        name: centos-release-openstack-train
+        state: latest
+      when: ansible_distribution == "CentOS"
+
+    - name: Install the RDO repository
+      tags: OS
+      yum:
+        name: "https://www.rdoproject.org/repos/rdo-release.rpm"
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Install the OpenStack Packages
+      tags: OS
+      yum:
+        name: 
+          - python-openstackclient
+          - openstack-selinux
+          - openstack-utils
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Start OpenStack services
+      tags: OS
+      systemd:
+        name: openstack-nova
+        state: started
+        enabled: yes
+      when: ansible_distribution == "CentOS"

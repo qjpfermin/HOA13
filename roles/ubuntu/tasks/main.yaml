@@ -1,0 +1,7 @@
+- import_tasks: etcd.yaml
+- import_tasks: memcached.yaml
+- import_tasks: mqueue.yaml
+- import_tasks: ntp.yaml
+- import_tasks: openstack.yaml
+- import_tasks: sqldb.yaml
+

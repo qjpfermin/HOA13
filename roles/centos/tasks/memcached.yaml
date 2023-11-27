@@ -1,0 +1,14 @@
+---
+    - name: Install Memcached
+      yum:
+        name: memcached
+        state: present
+      when: ansible_distribution == "CentOS"
+
+    - name: Start and enable Memcached service
+      service:
+        name: memcached
+        state: started
+        enabled: true
+      when: ansible_distribution == "CentOS"
+

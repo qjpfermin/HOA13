@@ -1,0 +1,49 @@
+---
+
+    - name: Download Erlang Solutions repository RPM
+      get_url:
+        url: http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+        dest: /tmp/erlang-solutions-1.0-1.noarch.rpm
+      when: ansible_distribution == "CentOS"
+
+#    - name: Add Erlang Solutions repository
+#      command: sudo rpm -Uvh /tmp/erlang-solutions-1.0-1.noarch.rpm
+#      when: ansible_distribution == "CentOS"
+
+#    - name: Install Erlang and dependencies
+#      yum:
+#        name: "{{ item }}"
+#        state: present
+#      loop:
+#        - erlang
+#        - socat
+#        - logrotate
+#      when: ansible_distribution == "CentOS"
+
+#    - name: Download RabbitMQ package
+#      get_url:
+#        url: https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.35/rabbitmq-server-3.8.35-1.el8.noarch.rpm
+#        dest: /tmp/rabbitmq-server-3.8.35-1.el8.noarch.rpm
+#      when: ansible_distribution == "CentOS"
+
+    - name: Add RabbitMQ signing key
+      command: sudo rpm --import https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+      when: ansible_distribution == "CentOS"
+
+#    - name: Install RabbitMQ server
+#      command: sudo rpm -Uvh /tmp/rabbitmq-server-3.8.35-1.el8.noarch.rpm
+#      when: ansible_distribution == "CentOS"
+
+    - name: Start and enable RabbitMQ service
+      systemd:
+        name: rabbitmq-server
+        state: started
+        enabled: true
+
+#    - name: Adding the openstack user in RabbitMQ (for CentOS)
+#      shell: rabbitmqctl add_user openstack RABBIT_PASS
+#      when: ansible_distribution == "CentOS"
+
+    - name: Permit the openstack user in RabbitMQ (for CentOS)
+      shell: rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+      when: ansible_distribution == "CentOS"
